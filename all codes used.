@@ -1,0 +1,171 @@
+Import relevant libraries
+
+import numpy as np
+import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+
+Load the data.
+
+
+
+data = pd.read_csv('Data_for_UCI_named.csv')
+
+
+
+Explore the data
+
+data.head()
+
+data.describe()
+
+data.isnull().sum()
+
+data = data.drop(['stab'], axis = 1)
+data.head()
+
+data.stabf.value_counts()
+
+imbalance detected in the dataset, hence i will apply an undersampling method for the dominant class.
+
+
+data_stable = data[data.stabf =='stable'] 
+data_unstable = data[data.stabf =='unstable'].sample(4000) 
+data_df = data_stable.append(data_unstable)
+data_df.describe()
+
+reset index and randomize.
+
+import sklearn.utils
+data_df = sklearn.utils.shuffle(data_df)
+data_df = data_df.reset_index(drop= True )
+
+data_df.stabf.value_counts()
+
+Data modelling
+
+x = data_df.drop(['stabf'],axis =1)
+y = data_df['stabf']
+
+cols = x.columns
+
+Feature scaling. using standard scaler.
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x = sc.fit_transform(x)
+
+
+x = pd.DataFrame(data = x, index = None, columns = cols)
+
+x.head()
+
+Train-test split
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size= 0.2 , random_state= 1 )
+
+Train your classifier.
+
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier()
+clf.fit(x_train,y_train)
+
+y_pred = clf.predict(x_test)
+y_pred = pd.DataFrame(data = y_pred)
+
+performance metrics
+
+#confustion matrix
+from sklearn.metrics import recall_score, accuracy_score, precision_score, f1_score,confusion_matrix
+#new_predictions = log_reg.predict(normalised_test_df)
+#new_predictions = pd.DataFrame(data = new_predictions)
+cnf_mat = confusion_matrix(y_true=y_test, y_pred=y_pred, labels=[ 'unstable' , 'stable' ])
+print(cnf_mat)
+
+#Accuracy
+accuracy = accuracy_score(y_true=y_test, y_pred=y_pred)
+print( 'Accuracy: {}' .format(round(accuracy* 100 ), 2 ))
+print( 'Accuracy: {}' .format(accuracy* 100 ), 2 )
+
+#Precision
+precision = precision_score(y_true=y_test, y_pred=y_pred, pos_label= 'stable' )
+print( 'Precision: {}' .format(round(precision* 100 ), 2 ))
+
+#Recall
+recall = recall_score(y_true=y_test, y_pred=y_pred, pos_label= 'stable' )
+print( 'Recall: {}' .format(round(recall* 100 ), 2 ))
+
+#F1_score
+f1 = f1_score(y_true=y_test, y_pred=y_pred, pos_label= 'stable' )
+print( 'F1: {}' .format(round(f1* 100 ), 2 ))
+
+Xg boost
+
+from xgboost import XGBClassifier
+classifier = XGBClassifier()
+classifier.fit(x_train,y_train)
+y_pred2 = classifier.predict(x_test)
+y_pred2 = pd.DataFrame(data = y_pred2)
+
+performance metrics
+
+#confustion matrix
+from sklearn.metrics import recall_score, accuracy_score, precision_score, f1_score,confusion_matrix
+#new_predictions = log_reg.predict(normalised_test_df)
+#new_predictions = pd.DataFrame(data = new_predictions)
+cnf_mat = confusion_matrix(y_true=y_test, y_pred=y_pred2, labels=[ 'unstable' , 'stable' ])
+print(cnf_mat)
+
+#Accuracy
+accuracy = accuracy_score(y_true=y_test, y_pred=y_pred2)
+print( 'Accuracy: {}' .format(round(accuracy* 100 ), 2 ))
+print( 'Accuracy: {}' .format(accuracy* 100 ), 2 )
+
+#Precision
+precision = precision_score(y_true=y_test, y_pred=y_pred2, pos_label= 'stable' )
+print( 'Precision: {}' .format(round(precision* 100 ), 2 ))
+
+#Recall
+recall = recall_score(y_true=y_test, y_pred=y_pred2, pos_label= 'stable' )
+print( 'Recall: {}' .format(round(recall* 100 ), 2 ))
+
+#F1_score
+f1 = f1_score(y_true=y_test, y_pred=y_pred2, pos_label= 'stable' )
+print( 'F1: {}' .format(round(f1* 100 ), 2 ))
+
+light GBM classifier
+
+from lightgbm import LGBMModel,LGBMClassifier
+classifier3 = LGBMClassifier()
+classifier3.fit(x_train,y_train)
+y_pred3 = classifier3.predict(x_test)
+y_pred3 = pd.DataFrame(data = y_pred3)
+
+performance metrics
+
+#confustion matrix
+from sklearn.metrics import recall_score, accuracy_score, precision_score, f1_score,confusion_matrix
+#new_predictions = log_reg.predict(normalised_test_df)
+#new_predictions = pd.DataFrame(data = new_predictions)
+cnf_mat = confusion_matrix(y_true=y_test, y_pred=y_pred3, labels=[ 'unstable' , 'stable' ])
+print(cnf_mat)
+
+#Accuracy
+accuracy = accuracy_score(y_true=y_test, y_pred=y_pred3)
+print( 'Accuracy: {}' .format(round(accuracy* 100 ), 2 ))
+print( 'Accuracy: {}' .format(accuracy* 100 ), 2 )
+
+#Precision
+precision = precision_score(y_true=y_test, y_pred=y_pred3, pos_label= 'stable' )
+print( 'Precision: {}' .format(round(precision* 100 ), 2 ))
+
+#Recall
+recall = recall_score(y_true=y_test, y_pred=y_pred3, pos_label= 'stable' )
+print( 'Recall: {}' .format(round(recall* 100 ), 2 ))
+
+#F1_score
+f1 = f1_score(y_true=y_test, y_pred=y_pred3, pos_label= 'stable' )
+print( 'F1: {}' .format(round(f1* 100 ), 2 ))
