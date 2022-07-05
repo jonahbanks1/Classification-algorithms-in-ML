@@ -1,5 +1,5 @@
-# stage-c-quiz.-classification
-Xgboost, Lightgbm and so forth
+
+Classification algorithms in ML
 
 README.md
 In this project, I analyzed Energy consumption data on behalf of a power company. Exploratory visuals pointed to a linear relationship between variables so we use a linear regression model for this prediction.
