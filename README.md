@@ -8,7 +8,11 @@ The classification algorithm has a method to store and assign weights to feature
 
 
 Data Summary:
+we have 2 classes of output: stable and unstable. each stable class has certain characteristics by default, which is reported by various detection tools.
+the machine will learn the relationships and use this to predict the class of an energy stream based on its key metrics. (dependent variables), when fed into model.
 
+We have more samples for stable, by almost 3 times the sample size. 
+we overcome this misfit by downsampling the stable class smaples to match the unstable class. 
 
 the steps in ths project:
 
